@@ -17,8 +17,12 @@ import com.clientmanager.springboot.entity.User;
 import com.clientmanager.springboot.exception.ResourceNotFoundException;
 import com.clientmanager.springboot.repository.UserRepository;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping("/api/users")
+@Api(tags = { "users" })
 public class UserController {
 
 	@Autowired
@@ -31,6 +35,7 @@ public class UserController {
 	}
 	
 	//get user by id
+	@ApiOperation(value = "Retrieves user by ID", notes = "return user entity", response = User.class)
 	@GetMapping("/{id}")
 	public User getUserById(@PathVariable (value = "id") long userId) {
 		return this.userRepository.findById(userId).
@@ -56,7 +61,7 @@ public class UserController {
 	
 	//delete user
 	@DeleteMapping("/{id}")
-	public ResponseEntity<User> ResponseEndeleteUser(@PathVariable ("id") long userId) {
+	public ResponseEntity<User> deleteUser(@PathVariable ("id") long userId) {
 		User existingUser = this.userRepository.findById(userId).
 				orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 		this.userRepository.delete(existingUser);
